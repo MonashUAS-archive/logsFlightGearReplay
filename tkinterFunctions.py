@@ -46,13 +46,6 @@ def set3(timeScale,c,master,maxTime,simThread):
     # Update mark time
     simThread.mark3 = float(timeScale.get())
 
-
-'''def createPlot():
-    
-    def __init__(self):
-        
-        '''
-
     
     
     

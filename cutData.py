@@ -21,8 +21,19 @@ def addDataToPlot(axes,subplot,timeData,fieldData):
     # Plot it
     subplot.set_xdata(timeData)
     subplot.set_ydata(fieldData)
-    axes.set_xlim(min(timeData),max(timeData))
-    axes.set_ylim(min(fieldData),max(fieldData))
+    # Setting limits
+    mint = min(timeData)
+    maxt = max(timeData)
+    minf = min(fieldData)
+    maxf = max(fieldData)
+    if mint != maxt:
+        axes.set_xlim(mint,maxt)
+    else:
+        axes.set_xlim(mint,mint+1)
+    if minf != maxf:
+        axes.set_ylim(minf,maxf)
+    else:
+        axes.set_ylim(minf,minf+1)
     
 
     

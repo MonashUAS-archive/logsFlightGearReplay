@@ -9,10 +9,11 @@ import matplotlib
 matplotlib.use('TkAgg')
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2TkAgg
+import cutData
 
 class plottingFrame(Frame):
     
-    def __init__(self,master,mainHeaders,data,id):
+    def __init__(self,master,mainHeaders,data,id,simThread):
         Frame.__init__(self,master,width=800,height=1000)
         
         # Store Info
@@ -20,6 +21,7 @@ class plottingFrame(Frame):
         self.mainHeaders = mainHeaders
         self.data = data
         self.id = id
+        self.simThread = simThread
         
         # Create Variables
         self.mainOpt = StringVar(self)
@@ -73,38 +75,48 @@ class plottingFrame(Frame):
         self.addFigLabel.grid(row=0,column=0)
         
         # Add Fig '+' Button
-        self.addFigButton1 = Button(self,text='+',command=lambda: addNewFigure(self.id+1,self.master,self.mainHeaders,self.data))
+        self.addFigButton1 = Button(self,text='+',command=lambda: addNewFigure(self.id+1,self.master,self.mainHeaders,self.data,self.simThread))
         self.addFigButton1.grid(row=0,column=1)
         
         # Add Fig '-' Button
         if self.id != 1:
             self.addFigButton2 = Button(self,text='-',command=lambda: removeFigure(self.id,self.master))
             self.addFigButton2.grid(row=0,column=2)  
-              
+            
+    def updatePlot(self):
+        # Get Period
+        period = float((self.master.plotFrame[0]).timeSelect.get())
+        # Get new data
+        currTime = self.simThread.currTime
+        timeData, fieldData = cutData.getSection(self.data, self.smallOpt.get(), currTime-period, currTime)
+        # Plot Data 
+        cutData.addDataToPlot(self.axes,self.plotHandles[0],timeData,fieldData)
         
     def addPlotButtons(self):
+        
         # Add Fig Label
         self.addPlotLabel = Label(self,text='Plot: ')
         self.addPlotLabel.grid(row=0,column=46)
         
         # Add Fig '+' Button
-        self.addPlotButton1 = Button(self,text='+')
+        self.addPlotButton1 = Button(self,text='+',command=lambda: self.updatePlot())
         self.addPlotButton1.grid(row=0,column=47)
         
         # Add Fig '-' Button
         self.addPlotButton2 = Button(self,text='-')
         self.addPlotButton2.grid(row=0,column=48)
         
+        
     def createFigure(self):
         # Create Figure
         self.fig = Figure(figsize=(12.5,3))
         # Add Subplot
-        self.subplot = self.fig.add_subplot(111)
+        self.axes = self.fig.add_subplot(111)
         # Adjustments
-        self.subplot.set_xlabel('Time (s)')
+        self.axes.set_xlabel('Time (s)')
         self.fig.subplots_adjust(bottom=0.18)
         self.plotHandles = []
-        self.plotHandles.append(self.subplot.plot([],[]))
+        self.plotHandles.append((self.axes.plot([],[]))[0])
         
     def createPlottingCanvas(self):
         # Create Canvas, add plot to it.
@@ -124,8 +136,10 @@ def addTimeSelector(frame):
     frame.timeLabel2 = Label(frame,text='Period:')
     frame.timeLabel2.grid(row=0,column=4)
     
-def addNewFigure(plotID,masterFrame,mainHeaders,data):
-    masterFrame.plotFrame.append(plottingFrame(masterFrame,mainHeaders,data,plotID))
+    return frame
+    
+def addNewFigure(plotID,masterFrame,mainHeaders,data,simThread):
+    masterFrame.plotFrame.append(plottingFrame(masterFrame,mainHeaders,data,plotID,simThread))
     masterFrame.plotFrame[plotID-1].grid(row=plotID+2,columnspan=49)
     
     return masterFrame

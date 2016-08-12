@@ -53,12 +53,6 @@ def createModeRadioButton(master,row,column):
     rb2 = Radiobutton(master,text='Skim Mode',variable=v,value=2,command=v.set(2)).grid(row=row,column=column+1)
     rb1 = Radiobutton(master,text='Play Mode',variable=v,value=1,command=v.set(1)).grid(row=row,column=column)
     
-    
     return v, [rb1,rb2]
-    
-def modeChange():
-    pass
-
-    
     
     

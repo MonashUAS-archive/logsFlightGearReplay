@@ -24,7 +24,7 @@ import plotClasses
 filename = '45.BIN'
 overwrite = False # Overwrite csv file
 updateRate = 10 # Hz
-mainHeaders = sorted(['GPS','IMU','RCIN','RCOU','BARO','POWER','CMD','ARSP','CURR','ATT','MAG','MODE','IMU2','AHR2','POS','MAG2','RATE','CTUN','STAT']) # The main headers to select to plot
+mainHeaders = sorted(['GPS','IMU','RCIN','RCOU','BARO','POWR','CMD','ARSP','CURR','ATT','MAG','MODE','IMU2','AHR2','POS','MAG2','RATE','CTUN','STAT']) # The main headers to select to plot
 
 # Flight Gear UDP Connection
 UDP_IP = '127.0.0.1'
@@ -98,14 +98,10 @@ ttk.Separator(master,orient=HORIZONTAL).grid(row=2,columnspan=49,sticky='ew')
 # Create Plotting Frame
 plotID = 1
 master.plotFrame = []
-plotClasses.addNewFigure(plotID,master,mainHeaders,data)
+master = plotClasses.addNewFigure(plotID,master,mainHeaders,data,simThread)
 
 # Add time selector (First Plot Only)
-plotClasses.addTimeSelector(master.plotFrame[0])
-
-# Create Second Plot
-#plotID = 2
-#plotFrame2 = plotClasses.addNewFigure(plotID,master,mainHeaders,data)
+master.plotFrame[0] = plotClasses.addTimeSelector(master.plotFrame[0])
 
 
 # ========================= Tkinter Loop ============================ #
@@ -113,9 +109,9 @@ while True:
     if simThread.running:
         timeScale.set(simThread.currTime)
         
-        #timeVec, fieldData = cutData.getSection(data, 'ARSP_Airspeed', startTime=max(0,simThread.currTime-20), endTime=simThread.currTime)
-        #cutData.addDataToPlot(a,h1,timeVec,fieldData)
-        #canvas.draw()
+        # Update Plots
+        master.plotFrame[0].updatePlot()
+        master.plotFrame[0].canvas.draw()
         
     master.update_idletasks()
     master.update()
