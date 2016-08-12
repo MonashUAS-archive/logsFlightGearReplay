@@ -73,13 +73,14 @@ class plottingFrame(Frame):
         self.addFigLabel.grid(row=0,column=0)
         
         # Add Fig '+' Button
-        self.addFigButton1 = Button(self,text='+')
+        self.addFigButton1 = Button(self,text='+',command=lambda: addNewFigure(self.id+1,self.master,self.mainHeaders,self.data))
         self.addFigButton1.grid(row=0,column=1)
         
         # Add Fig '-' Button
         if self.id != 1:
-            self.addFigButton2 = Button(self,text='-')
-            self.addFigButton2.grid(row=0,column=2)        
+            self.addFigButton2 = Button(self,text='-',command=lambda: removeFigure(self.id,self.master))
+            self.addFigButton2.grid(row=0,column=2)  
+              
         
     def addPlotButtons(self):
         # Add Fig Label
@@ -110,3 +111,28 @@ class plottingFrame(Frame):
         self.canvas = FigureCanvasTkAgg(self.fig,master=self)
         self.canvas.show()
         self.canvas.get_tk_widget().grid(row=1,columnspan=49,sticky=NSEW)
+        
+def addTimeSelector(frame):
+    # Entry Bar
+    frame.timeSelect = Entry(frame,width=8)
+    frame.timeSelect.grid(row=0,column=5)
+    frame.timeSelect.insert(0,"20")
+    # Seconds Label
+    frame.timeLabel = Label(frame,text='s')
+    frame.timeLabel.grid(row=0,column=6,sticky=W)
+    # Period Label
+    frame.timeLabel2 = Label(frame,text='Period:')
+    frame.timeLabel2.grid(row=0,column=4)
+    
+def addNewFigure(plotID,masterFrame,mainHeaders,data):
+    masterFrame.plotFrame.append(plottingFrame(masterFrame,mainHeaders,data,plotID))
+    masterFrame.plotFrame[plotID-1].grid(row=plotID+2,columnspan=49)
+    
+    return masterFrame
+
+def removeFigure(plotID,masterFrame):
+    masterFrame.plotFrame[plotID-1].grid_forget()
+
+    
+    
+    

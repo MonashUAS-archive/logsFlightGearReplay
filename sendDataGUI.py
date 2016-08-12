@@ -31,14 +31,15 @@ class outDataThread(threading.Thread):
 		# Create Flight Data Structure
 		self.fdm = fgFDM.fgFDM()
 		
-	def updatePosition(self,bypass=False,bypassTime=0):
+	def updatePosition(self,bypass=False,bypassTime=0,mode=1):
 		# Get current time
 		if not bypass:
 			self.currTime = time.time()-self.blockStartTime + self.blockStartSimTime
-		else:
+		elif mode.get()==2:
 			self.currTime = bypassTime
 			self.blockStartTime = time.time()
 			self.blockStartSimTime = self.currTime
+			pass
 			
 		# Get Relevant Index
 		index, _ = packFDM.findClosestTime(self.currTime,self.data.timeVec)
