@@ -112,8 +112,9 @@ while True:
         timeScale.set(simThread.currTime)
         
         # Update Plots
-        master.plotFrame[0].updatePlot()
-        master.plotFrame[0].canvas.draw()
+        for plotFrame in master.plotFrame:
+            plotFrame.updatePlot()
+            plotFrame.canvas.draw()
         
     master.update_idletasks()
     master.update()
