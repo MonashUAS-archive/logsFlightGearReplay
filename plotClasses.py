@@ -89,8 +89,20 @@ class plottingFrame(Frame):
         # Get new data
         currTime = self.simThread.currTime
         timeData, fieldData = cutData.getSection(self.data, self.smallOpt.get(), currTime-period, currTime)
+        # Check Limits Checkbox
+        check = int(self.master.plotFrame[0].limitCheck.get())
         # Plot Data 
-        cutData.addDataToPlot(self.axes,self.plotHandles[0],timeData,fieldData)
+        if check == 0:
+            # Changing Limits
+            cutData.addDataToPlot(self.axes,self.plotHandles[0],timeData,fieldData)
+        else:
+            ymin = min(fieldData)
+            ymax = max(fieldData)
+            if ymin>0:
+                ymin=0
+            if ymax<0:
+                ymax=0
+            cutData.addDataToPlot(self.axes,self.plotHandles[0],timeData,fieldData,yLim=[ymin,ymax])
         
     def addPlotButtons(self):
         
@@ -137,13 +149,23 @@ def addTimeSelector(frame):
     frame.timeLabel2.grid(row=0,column=4)
     
     return frame
+
+def addForeverYLimits(frame):
+    # Variable
+    frame.limitCheck = IntVar()
+    frame.limitCheck.set(0)
+    # Create Checkbox
+    frame.limitCheckBox = Checkbutton(frame,text=' Enforce zero y Limits',variable=frame.limitCheck)
+    frame.limitCheckBox.grid(row=0,column=10)
+    
+    return frame
     
 def addNewFigure(plotID,masterFrame,mainHeaders,data,simThread):
     masterFrame.plotFrame.append(plottingFrame(masterFrame,mainHeaders,data,plotID,simThread))
     masterFrame.plotFrame[plotID-1].grid(row=plotID+2,columnspan=49)
     
     return masterFrame
-
+ 
 def removeFigure(plotID,masterFrame):
     masterFrame.plotFrame[plotID-1].grid_forget()
 

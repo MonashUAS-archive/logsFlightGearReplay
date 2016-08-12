@@ -103,6 +103,8 @@ master = plotClasses.addNewFigure(plotID,master,mainHeaders,data,simThread)
 # Add time selector (First Plot Only)
 master.plotFrame[0] = plotClasses.addTimeSelector(master.plotFrame[0])
 
+# Add Forever y Limits Checkbox
+master.plotFrame[0] = plotClasses.addForeverYLimits(master.plotFrame[0])
 
 # ========================= Tkinter Loop ============================ #
 while True:

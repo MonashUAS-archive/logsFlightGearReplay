@@ -17,23 +17,27 @@ def getSection(data,field,startTime,endTime):
     
     return timeData, fieldData
 
-def addDataToPlot(axes,subplot,timeData,fieldData):
+def addDataToPlot(axes,subplot,timeData,fieldData,yLim=False):
     # Plot it
     subplot.set_xdata(timeData)
     subplot.set_ydata(fieldData)
-    # Setting limits
+    # Setting Time limits
     mint = min(timeData)
     maxt = max(timeData)
-    minf = min(fieldData)
-    maxf = max(fieldData)
     if mint != maxt:
         axes.set_xlim(mint,maxt)
     else:
         axes.set_xlim(mint,mint+1)
-    if minf != maxf:
-        axes.set_ylim(minf,maxf)
+    # Setting y limits
+    if not yLim:
+        minf = min(fieldData)
+        maxf = max(fieldData)
+        if minf != maxf:
+            axes.set_ylim(minf,maxf)
+        else:
+            axes.set_ylim(minf,minf+1)
     else:
-        axes.set_ylim(minf,minf+1)
-    
+        # Set according to data for all time
+        axes.set_ylim(yLim[0],yLim[1])
 
     
