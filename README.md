@@ -16,7 +16,7 @@ python fgLauncher.py
 to launch the Flight Gear instance. Once this is fully up and running, run the timeControl.py script in another terminal.
 
 ```python
-python timeControl.py
+python timeControl.py <logfile>
 ```
 
 ## Motivation

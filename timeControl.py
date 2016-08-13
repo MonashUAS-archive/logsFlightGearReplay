@@ -19,9 +19,14 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolb
 from matplotlib.figure import Figure
 import cutData
 import plotClasses
+import sys
 
 # Setup
-filename = '45.BIN'
+if len(sys.argv)>1:
+    filename = sys.argv[1]
+else:
+    filename = '45.BIN'
+    
 overwrite = False # Overwrite csv file
 updateRate = 10 # Hz
 mainHeaders = sorted(['GPS','IMU','RCIN','RCOU','BARO','POWR','CMD','ARSP','CURR','ATT','MAG','MODE','IMU2','AHR2','POS','MAG2','RATE','CTUN','STAT']) # The main headers to select to plot
