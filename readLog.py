@@ -17,7 +17,7 @@ overwrite = False # Overwrite csv file
 def convert2CSV(filename,overwrite=False):
     # First Convert Bin File to .csv
     csvfile = filename.split('.')[0]+'.csv'
-    if overwrite or not os.path.isfile(filename):
+    if overwrite or (not os.path.isfile(csvfile)):
         startTime = time.time()
         print 'Converting %s file to %s.' % (filename,csvfile)
         os.system('python sdlog2_dump.py %s -f %s' % (filename,csvfile))
