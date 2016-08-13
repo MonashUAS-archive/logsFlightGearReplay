@@ -33,3 +33,9 @@ You will also require an aircraft to operate in Flight Gear. Current the launche
 You will need an installation of Python 2.7. Other required packages are
 * pymavlink
 * numpy
+
+These can be installed with
+
+```python
+pip install <package_name>
+```
